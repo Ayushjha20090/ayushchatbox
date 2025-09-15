@@ -6,15 +6,16 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 
-const PORT = 3000;
+// 🔥 PORT ko environment se lo (Render ke liye important)
+const PORT = process.env.PORT || 3000;
 
-// Create uploads folder if not exists
+// Uploads folder banado agar nahi hai
 const uploadDir = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Multer storage
+// Multer storage setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -56,7 +57,7 @@ app.get('/chat.html', (req, res) => {
 // Upload route
 app.post('/upload', upload.single('image'), (req, res) => {
   const imageUrl = `/uploads/${req.file.filename}`;
-  res.json({ url: imageUrl }); // Send URL of uploaded image
+  res.json({ url: imageUrl });
 });
 
 // Socket.io
